@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>BỆNH VIỆN THẨM MỸ EMCAS - ĐT: 0979 223 636</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #fffbe6; color: #333; margin: 0; padding: 20px; }
+        header { text-align: center; background: #002147; color: #ffd700; padding: 20px 10px; border-radius: 8px; }
+        img.logo { max-width: 120px; border-radius: 50%; }
+        h1 { margin: 10px 0 0 0; font-size: 24px; }
+        form { max-width: 500px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; }
+        button { background: #ffd700; color: #002147; border: none; padding: 12px; width: 100%; font-weight: bold; border-radius: 6px; cursor: pointer; }
+        #result { margin-top: 20px; background: #f9f9f9; padding: 20px; border-radius: 8px; }
+        #zalo-call { position: fixed; bottom: 20px; right: 20px; background: #25d366; color: white; padding: 12px 16px; border-radius: 50%; text-decoration: none; font-size: 20px; }
+        .meal-img { width: 100%; border-radius: 8px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo_emcas.png" alt="EMCAS Logo" class="logo" /><br>
+        <h1>BỆNH VIỆN THẨM MỸ EMCAS</h1>
+        <p>ĐT: 0979 223 636</p>
+    </header>
+
+    <form id="calc-form">
+        <label>Giới tính:</label>
+        <select id="gender"><option value="Nam">Nam</option><option value="Nữ">Nữ</option></select>
+        <label>Tuổi:</label>
+        <input type="number" id="age" value="30" />
+        <label>Cân nặng (kg):</label>
+        <input type="number" id="weight" value="68" />
+        <label>Chiều cao (cm):</label>
+        <input type="number" id="height" value="170" />
+        <label>Mức độ vận động:</label>
+        <select id="activity">
+            <option value="1.2">Ít hoặc không vận động</option>
+            <option value="1.375">Vận động nhẹ</option>
+            <option value="1.55">Vận động vừa</option>
+            <option value="1.725">Vận động nhiều</option>
+            <option value="1.9">Vận động rất nhiều</option>
+        </select>
+        <button type="button" onclick="calculate()">Tính Kcal & BMI</button>
+        <div id="result"></div>
+    </form>
+
+    <a id="zalo-call" href="https://zalo.me/0979223636" target="_blank">Zalo</a>
+
+    <script>
+        function calculate() {
+            const gender = document.getElementById("gender").value;
+            const age = +document.getElementById("age").value;
+            const weight = +document.getElementById("weight").value;
+            const height = +document.getElementById("height").value;
+            const activity = +document.getElementById("activity").value;
+
+            let bmr = gender === "Nam"
+                ? 66 + (13.7 * weight) + (5 * height) - (6.8 * age)
+                : 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
+
+            const tdee = bmr * activity;
+            const bmi = weight / ((height / 100) * (height / 100));
+            let status = "";
+            if (bmi < 18.5) status = "Bạn đang thiếu cân, nên tăng cân hợp lý.";
+            else if (bmi < 23) status = "Bạn đang có cân nặng bình thường, hãy duy trì.";
+            else if (bmi < 25) status = "Bạn hơi thừa cân, nên giảm cân nhẹ.";
+            else status = "Bạn đang thừa cân, nên có kế hoạch giảm cân.";
+
+            const carb = tdee * 0.5 / 4;
+            const protein = tdee * 0.25 / 4;
+            const fat = tdee * 0.25 / 9;
+
+            document.getElementById("result").innerHTML =
+                `<h3>Kết quả:</h3>
+                BMI: ${bmi.toFixed(1)} - ${status}<br>
+                BMR: ${bmr.toFixed(2)} kcal/ngày<br>
+                TDEE: ${tdee.toFixed(2)} kcal/ngày<br><br>
+                <b>Chia tỷ lệ dinh dưỡng:</b><br>
+                Carb: ${carb.toFixed(0)}g | Protein: ${protein.toFixed(0)}g | Fat: ${fat.toFixed(0)}g<br><br>
+                <b>Thực đơn mẫu 7 ngày (~${tdee.toFixed(0)} kcal/ngày):</b><br>
+                - Ngày 1: Trứng, bánh mì, chuối, ức gà, cá hồi, salad<br>
+                - Ngày 2: Yến mạch, táo, thịt nạc, bí đỏ, miến gà<br>
+                - Ngày 3: Trứng, bánh mì, cá thu, tôm, salad xà lách<br>
+                - Ngày 4: Bánh mì ốp la, bò xào rau, bún thịt luộc<br>
+                - Ngày 5: Yến mạch, bơ, ức gà xào, cháo cá<br>
+                - Ngày 6: Bánh mì, trứng, thịt nạc kho, bún cá<br>
+                - Ngày 7: Phở gà, cá basa, miến xào tôm<br>
+                <img src="meal_placeholder.jpg" class="meal-img" alt="Hình minh họa">`;
+        }
+    </script>
+</body>
+</html>
