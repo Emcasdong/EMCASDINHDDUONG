@@ -1,136 +1,69 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8" />
-    <title>BỆNH VIỆN THẨM MỸ EMCAS - ĐT: 0979 223 636</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính BMI - EMCAS</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #fffbe6; color: #333; margin: 0; padding: 20px; }
-        header { text-align: center; background: #002147; color: #ffd700; padding: 20px 10px; border-radius: 8px; }
-        img.logo { max-width: 120px; border-radius: 50%; }
-        h1 { margin: 10px 0 0 0; font-size: 24px; }
-        form { max-width: 500px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        input, select { width: 100%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; }
-        button { background: #ffd700; color: #002147; border: none; padding: 12px; width: 100%; font-weight: bold; border-radius: 6px; cursor: pointer; }
-        #result { margin-top: 20px; background: #f9f9f9; padding: 20px; border-radius: 8px; }
-        #zalo-call { position: fixed; bottom: 20px; right: 20px; background: #25d366; color: white; padding: 12px 16px; border-radius: 50%; text-decoration: none; font-size: 20px; }
-        .meal-img { width: 100%; border-radius: 8px; margin-top: 10px; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 40px;
+            text-align: center;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <img src="logo_emcas.png" alt="EMCAS Logo" class="logo" /><br>
-        <h1>BỆNH VIỆN THẨM MỸ EMCAS</h1>
-        <p>ĐT: 0979 223 636</p>
-    </header>
+    <h1>Tính chỉ số BMI</h1>
 
-    <form id="calc-form">
-        <label>Giới tính:</label>
-        <select id="gender"><option value="Nam">Nam</option><option value="Nữ">Nữ</option></select>
-        <label>Tuổi:</label>
-        <input type="number" id="age" value="30" />
-        <label>Cân nặng (kg):</label>
-        <input type="number" id="weight" value="68" />
-        <label>Chiều cao (cm):</label>
-        <input type="number" id="height" value="170" />
-        <label>Mức độ vận động:</label>
-        <select id="activity">
-            <option value="1.2">Ít hoặc không vận động</option>
-            <option value="1.375">Vận động nhẹ</option>
-            <option value="1.55">Vận động vừa</option>
-            <option value="1.725">Vận động nhiều</option>
-            <option value="1.9">Vận động rất nhiều</option>
-        </select>
-        <button type="button" onclick="calculate()">Tính Kcal & BMI</button>
-        <div id="result"></div>
-    </form>
+    <label for="weight">Cân nặng (kg):</label>
+    <input id="weight" type="number" placeholder="VD: 60" /><br>
 
-    <a id="zalo-call" href="https://zalo.me/0979223636" target="_blank">Zalo</a>
+    <label for="height">Chiều cao (cm):</label>
+    <input id="height" type="number" placeholder="VD: 165" /><br>
+
+    <button type="button" onclick="calculateBMI()">Tính BMI</button>
+
+    <div id="result"></div>
 
     <script>
-        function calculate() {
-            const gender = document.getElementById("gender").value;
-            const age = +document.getElementById("age").value;
-            const weight = +document.getElementById("weight").value;
-            const height = +document.getElementById("height").value;
-            const activity = +document.getElementById("activity").value;
+        function calculateBMI() {
+            const weight = parseFloat(document.getElementById("weight").value);
+            const height = parseFloat(document.getElementById("height").value) / 100;
+            const bmi = (weight / (height * height)).toFixed(1);
 
-            let bmr = gender === "Nam"
-                ? 66 + (13.7 * weight) + (5 * height) - (6.8 * age)
-                : 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
+            const minWeight = 18.5 * height * height;
+            const maxWeight = 24.9 * height * height;
+            let message = `BMI: ${bmi} ‑ `;
 
-            const tdee = bmr * activity;
-            const bmi = weight / ((height / 100) * (height / 100));
-            let status = "";
-            let ideal_bmi = 22;
-let height_m = height / 100;
-let ideal_weight = ideal_bmi * height_m * height_m;
-let weight_diff = (weight - ideal_weight).toFixed(1);
+            if (bmi < 18.5) {
+                const gain = (minWeight - weight).toFixed(1);
+                message += `Bạn thiếu cân. Bạn nên tăng khoảng ${gain} kg để đạt cân nặng chuẩn.`;
+            } else if (bmi < 23) {
+                message += "Cân nặng bình thường. Giữ vững phong độ nhé!";
+            } else if (bmi < 25) {
+                const lose = (weight - maxWeight).toFixed(1);
+                message += `Bạn hơi thừa cân. Bạn nên giảm khoảng ${lose} kg để đạt cân nặng chuẩn.`;
+            } else if (bmi < 30) {
+                const lose = (weight - maxWeight).toFixed(1);
+                message += `Bạn thừa cân. Bạn nên giảm khoảng ${lose} kg để đạt cân nặng chuẩn.`;
+            } else {
+                const lose = (weight - maxWeight).toFixed(1);
+                message += `Bạn béo phì. Bạn nên giảm khoảng ${lose} kg để đạt cân nặng chuẩn.`;
+            }
 
-if const bmiMin = 18.5;
-const bmiMax = 24.9;
-const minWeight = bmiMin * height * height;
-const maxWeight = bmiMax * height * height;
-
-if (bmi < bmiMin) {
-    const needGain = (minWeight - weight).toFixed(1);
-    document.getElementById("result").innerText = `Bạn đang thiếu cân. Bạn cần tăng khoảng ${needGain} kg để đạt mức cân nặng bình thường.`;
-} else if (bmi <= bmiMax) {
-    document.getElementById("result").innerText = "Bạn có cân nặng bình thường.";
-} else {
-    const needLose = (weight - maxWeight).toFixed(1);
-    document.getElementById("result").innerText = `Bạn đang thừa cân. Bạn cần giảm khoảng ${needLose} kg để đạt mức cân nặng bình thường.`;
-}
-
-
-            const carb = tdee * 0.5 / 4;
-            const protein = tdee * 0.25 / 4;
-            const fat = tdee * 0.25 / 9;
-
-            document.getElementById("result").innerHTML =
-                `<h3>Kết quả:</h3>
-                BMI: ${bmi.toFixed(1)} - ${status}<br>
-                BMR: ${bmr.toFixed(2)} kcal/ngày<br>
-                TDEE: ${tdee.toFixed(2)} kcal/ngày<br><br>
-                <b>Chia tỷ lệ dinh dưỡng:</b><br>
-                Carb: ${carb.toFixed(0)}g | Protein: ${protein.toFixed(0)}g | Fat: ${fat.toFixed(0)}g<br><br>
-                <b>Thực đơn mẫu 7 ngày (~${tdee.toFixed(0)} kcal/ngày):</b><br>
-                - Ngày 1: Trứng, bánh mì, chuối, ức gà, cá hồi, salad<br>
-                - Ngày 2: Yến mạch, táo, thịt nạc, bí đỏ, miến gà<br>
-                - Ngày 3: Trứng, bánh mì, cá thu, tôm, salad xà lách<br>
-                - Ngày 4: Bánh mì ốp la, bò xào rau, bún thịt luộc<br>
-                - Ngày 5: Yến mạch, bơ, ức gà xào, cháo cá<br>
-                - Ngày 6: Bánh mì, trứng, thịt nạc kho, bún cá<br>
-                - Ngày 7: Phở gà, cá basa, miến xào tôm<br>
-                <img src="meal_placeholder.jpg" class="meal-img" alt="Hình minh họa">`;
+            document.getElementById("result").innerText = message;
         }
     </script>
 </body>
 </html>
-<head>
-  <meta charset="UTF-8" />
-  <title>EMCAS DINH DƯỠNG</title>
-
-  <style>
-    body  {
-      font-family: Arial, sans-serif;
-      font-size: 20px; /* 👉 Tăng toàn trang */
-      line-height: 1.6;
-    }
-    h1 {
-      font-size: 32px; /* Tiêu đề to */
-    }
-    h2 {
-      font-size: 26px;
-    }
-    p, li, label {
-      font-size: 20px;
-    }
-    input, button {
-      font-size: 20px;
-    }
-  </style>
-</head>
-<h2>Hình minh hoạ thực đơn</h2>
-<img src="menu_7ngay.png" alt="Thực đơn 7 ngày EMCAS"
-     style="max-width:100%; height:auto;">
