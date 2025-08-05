@@ -67,12 +67,19 @@ let height_m = height / 100;
 let ideal_weight = ideal_bmi * height_m * height_m;
 let weight_diff = (weight - ideal_weight).toFixed(1);
 
-if (bmi < 18.5) {
-    result += `Bạn đang thiếu cân. Bạn cần tăng khoảng ${Math.abs(weight_diff)} kg để đạt cân nặng lý tưởng.`;
-} else if (bmi < 25) {
-    result += "Bạn có cân nặng bình thường.";
+if const bmiMin = 18.5;
+const bmiMax = 24.9;
+const minWeight = bmiMin * height * height;
+const maxWeight = bmiMax * height * height;
+
+if (bmi < bmiMin) {
+    const needGain = (minWeight - weight).toFixed(1);
+    document.getElementById("result").innerText = `Bạn đang thiếu cân. Bạn cần tăng khoảng ${needGain} kg để đạt mức cân nặng bình thường.`;
+} else if (bmi <= bmiMax) {
+    document.getElementById("result").innerText = "Bạn có cân nặng bình thường.";
 } else {
-    result += `Bạn đang thừa cân. Bạn cần giảm khoảng ${weight_diff} kg để đạt cân nặng lý tưởng.`;
+    const needLose = (weight - maxWeight).toFixed(1);
+    document.getElementById("result").innerText = `Bạn đang thừa cân. Bạn cần giảm khoảng ${needLose} kg để đạt mức cân nặng bình thường.`;
 }
 
 
