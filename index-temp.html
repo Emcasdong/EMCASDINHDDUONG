@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tính BMI & TDEE</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    label { display: block; margin-top: 10px; }
+    input, select { width: 100%; padding: 8px; margin-top: 5px; }
+    button { margin-top: 15px; padding: 10px; width: 100%; background: #007BFF; color: white; border: none; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    .result { margin-top: 20px; white-space: pre-line; }
+    img { width: 100%; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Tính BMI, BMR & TDEE</h2>
+  <label>Giới tính:
+    <select id="gender">
+      <option value="male">Nam</option>
+      <option value="female">Nữ</option>
+    </select>
+  </label>
+  <label>Tuổi:
+    <input type="number" id="age" value="30">
+  </label>
+  <label>Cân nặng (kg):
+    <input type="number" id="weight" value="68">
+  </label>
+  <label>Chiều cao (cm):
+    <input type="number" id="height" value="170">
+  </label>
+  <label>Mức độ vận động:
+    <select id="activity">
+      <option value="1.2">Ít hoặc không vận động</option>
+      <option value="1.375">Vận động nhẹ</option>
+      <option value="1.55">Vận động vừa</option>
+      <option value="1.725">Vận động nhiều</option>
+      <option value="1.9">Vận động rất nhiều</option>
+    </select>
+  </label>
+  <button onclick="calculate()">Tính Kcal & BMI</button>
+  <div class="result" id="result"></div>
+  <img src="menu_7ngay.png" alt="Hình minh họa thực đơn mẫu 7 ngày">
+
+  <script>
+    function calculate() {
+      const gender = document.getElementById('gender').value;
+      const age = parseInt(document.getElementById('age').value);
+      const weight = parseFloat(document.getElementById('weight').value);
+      const height = parseFloat(document.getElementById('height').value);
+      const activity = parseFloat(document.getElementById('activity').value);
+
+      const heightM = height / 100;
+      const bmi = weight / (heightM * heightM);
+      const bmiRounded = bmi.toFixed(1);
+
+      const idealWeight = 22 * (heightM * heightM);
+      const weightDiff = weight - idealWeight;
+      const weightStatus = weightDiff > 0
+        ? `Bạn hơi thừa cân.\nBạn nên giảm khoảng ${weightDiff.toFixed(1)} kg để đạt cân nặng lý tưởng.`
+        : weightDiff < 0
+          ? `Bạn hơi thiếu cân.\nBạn nên tăng khoảng ${Math.abs(weightDiff).toFixed(1)} kg để đạt cân nặng lý tưởng.`
+          : `Bạn đang ở cân nặng lý tưởng.`;
+
+      let bmr = gender === 'male'
+        ? 10 * weight + 6.25 * height - 5 * age + 5
+        : 10 * weight + 6.25 * height - 5 * age - 161;
+
+      const tdee = bmr * activity;
+      const carb = Math.round((0.5 * tdee) / 4);
+      const protein = Math.round((0.25 * tdee) / 4);
+      const fat = Math.round((0.25 * tdee) / 9);
+
+      const resultText = `BMI: ${bmiRounded} - ${weightStatus}
+\nBMR: ${bmr.toFixed(2)} kcal/ngày\nTDEE: ${tdee.toFixed(2)} kcal/ngày
+\nChia tỷ lệ dinh dưỡng:\nCarb: ${carb}g | Protein: ${protein}g | Fat: ${fat}g
+\nThực đơn mẫu 7 ngày (~${Math.round(tdee)} kcal/ngày):\n- Ngày 1: Trứng, bánh mì, chuối, ức gà, cá hồi, salad\n- Ngày 2: Yến mạch, táo, thịt nạc, bí đỏ, miến gà\n- Ngày 3: Trứng, bánh mì, cá thu, tôm, salad xà lách\n- Ngày 4: Bánh mì ốp la, bò xào rau, bún thịt luộc\n- Ngày 5: Yến mạch, bơ, ức gà xào, cháo cá\n- Ngày 6: Bánh mì, trứng, thịt nạc kho, bún cá\n- Ngày 7: Phở gà, cá basa, miến xào tôm`;
+
+      document.getElementById('result').textContent = resultText;
+    }
+  </script>
+</body>
+</html>
 
