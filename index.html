@@ -110,39 +110,42 @@
 
     <script>
 function calculate() {
-    const weight = parseFloat(document.getElementById("weight").value);
-    const height = parseFloat(document.getElementById("height").value) / 100;
-    const age = parseInt(document.getElementById("age").value);
     const gender = document.getElementById("gender").value;
+    const age = parseFloat(document.getElementById("age").value);
+    const weight = parseFloat(document.getElementById("weight").value);
+    const heightCm = parseFloat(document.getElementById("height").value);
     const activity = parseFloat(document.getElementById("activity").value);
 
-    if (!weight || !height || !age) {
-        alert("Vui lòng nhập đầy đủ thông tin.");
-        return;
+    const height = heightCm / 100;
+    const bmi = weight / (height * height);
+
+    let status = "";
+    if (bmi < 18.5) status = "Bạn đang thiếu cân.";
+    else if (bmi < 24.9) status = "Cân nặng lý tưởng.";
+    else if (bmi < 29.9) status = "Bạn hơi thừa cân.";
+    else status = "Bạn béo phì. Cần giảm cân.";
+
+    const idealWeight = 22 * (height * height);
+    const weightDiff = weight - idealWeight;
+    const weightNote =
+        Math.abs(weightDiff) < 1
+            ? "Bạn đang ở gần mức cân nặng lý tưởng."
+            : weightDiff > 0
+            ? `Bạn nên giảm khoảng ${weightDiff.toFixed(1)} kg để đạt cân nặng lý tưởng.`
+            : `Bạn nên tăng khoảng ${Math.abs(weightDiff).toFixed(1)} kg để đạt cân nặng lý tưởng.`;
+
+    let bmr = 0;
+    if (gender === "male") {
+        bmr = 10 * weight + 6.25 * heightCm - 5 * age + 5;
+    } else {
+        bmr = 10 * weight + 6.25 * heightCm - 5 * age - 161;
     }
 
-    const bmi = weight / (height * height);
-    const status =
-        bmi < 18.5
-            ? "Bạn đang thiếu cân."
-            : bmi < 25
-            ? "Bạn có cân nặng lý tưởng."
-            : bmi < 30
-            ? "Bạn hơi thừa cân."
-            : "Bạn đang béo phì.";
-
-    const bmr =
-        gender === "male"
-            ? 10 * weight + 6.25 * (height * 100) - 5 * age + 5
-            : 10 * weight + 6.25 * (height * 100) - 5 * age - 161;
-
     const tdee = bmr * activity;
-
     const carb = (0.5 * tdee) / 4;
     const protein = (0.25 * tdee) / 4;
     const fat = (0.25 * tdee) / 9;
 
-    // 🔽 Tạo menu 7 ngày dựa theo mức TDEE
     let menu = "";
 
     if (tdee < 1800) {
@@ -176,15 +179,14 @@ function calculate() {
 
     document.getElementById("result").innerHTML =
         `<h3>Kết quả:</h3>
-        BMI: ${bmi.toFixed(1)} – ${status}<br>
+        BMI: ${bmi.toFixed(1)} – ${status}<br>${weightNote}<br>
         BMR: ${bmr.toFixed(2)} kcal/ngày<br>
         TDEE: ${tdee.toFixed(2)} kcal/ngày<br><br>
         <b>Chia tỷ lệ dinh dưỡng:</b><br>
         Carb: ${carb.toFixed(0)}g | Protein: ${protein.toFixed(0)}g | Fat: ${fat.toFixed(0)}g<br><br>
         <b>Thực đơn mẫu 7 ngày (~${tdee.toFixed(0)} kcal/ngày):</b><br>
         ${menu}
-        <br><br>
-        <img src="menu_7ngay.jpg" class="meal-img" alt="Thực đơn minh họa">`;
+        <img src="menu_7ngay.jpg" class="meal-img" alt="Chúc bạn luôn: vui khỏe - xinh đẹp - mạnh mẽ">`;
 }
 </script>
 </body>
