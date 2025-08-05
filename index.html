@@ -62,10 +62,19 @@
             const tdee = bmr * activity;
             const bmi = weight / ((height / 100) * (height / 100));
             let status = "";
-            if (bmi < 18.5) status = "Bạn đang thiếu cân, nên tăng cân hợp lý.";
-            else if (bmi < 23) status = "Bạn đang có cân nặng bình thường, hãy duy trì.";
-            else if (bmi < 25) status = "Bạn hơi thừa cân, nên giảm cân nhẹ.";
-            else status = "Bạn đang thừa cân, nên có kế hoạch giảm cân.";
+            let ideal_bmi = 22;
+let height_m = height / 100;
+let ideal_weight = ideal_bmi * height_m * height_m;
+let weight_diff = (weight - ideal_weight).toFixed(1);
+
+if (bmi < 18.5) {
+    result += `Bạn đang thiếu cân. Bạn cần tăng khoảng ${Math.abs(weight_diff)} kg để đạt cân nặng lý tưởng.`;
+} else if (bmi < 25) {
+    result += "Bạn có cân nặng bình thường.";
+} else {
+    result += `Bạn đang thừa cân. Bạn cần giảm khoảng ${weight_diff} kg để đạt cân nặng lý tưởng.`;
+}
+
 
             const carb = tdee * 0.5 / 4;
             const protein = tdee * 0.25 / 4;
