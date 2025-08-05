@@ -49,45 +49,60 @@
 
     <script>
         function calculate() {
-            const gender = document.getElementById("gender").value;
-            const age = +document.getElementById("age").value;
-            const weight = +document.getElementById("weight").value;
-            const height = +document.getElementById("height").value;
-            const activity = +document.getElementById("activity").value;
+    const gender = document.getElementById("gender").value;
+    const age = +document.getElementById("age").value;
+    const weight = +document.getElementById("weight").value;
+    const height = +document.getElementById("height").value;
+    const activity = +document.getElementById("activity").value;
 
-            let bmr = gender === "Nam"
-                ? 66 + (13.7 * weight) + (5 * height) - (6.8 * age)
-                : 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
+    // BMR theo giới tính
+    let bmr = gender === "Nam"
+        ? 66 + (13.7 * weight) + (5 * height) - (6.8 * age)
+        : 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
 
-            const tdee = bmr * activity;
-            const bmi = weight / ((height / 100) * (height / 100));
-            let status = "";
-            if (bmi < 18.5) status = "Bạn đang thiếu cân, nên tăng cân hợp lý.";
-            else if (bmi < 23) status = "Bạn đang có cân nặng bình thường, hãy duy trì.";
-            else if (bmi < 25) status = "Bạn hơi thừa cân, nên giảm cân nhẹ.";
-            else status = "Bạn đang thừa cân, nên có kế hoạch giảm cân.";
+    const tdee = bmr * activity;
+    const bmi = weight / ((height / 100) ** 2);
 
-            const carb = tdee * 0.5 / 4;
-            const protein = tdee * 0.25 / 4;
-            const fat = tdee * 0.25 / 9;
+    // BMI lý tưởng
+    const idealBMI = gender === "Nam" ? 22 : 21.5;
+    const idealWeight = idealBMI * ((height / 100) ** 2);
+    const weightDiff = weight - idealWeight;
 
-            document.getElementById("result").innerHTML =
-                `<h3>Kết quả:</h3>
-                BMI: ${bmi.toFixed(1)} - ${status}<br>
-                BMR: ${bmr.toFixed(2)} kcal/ngày<br>
-                TDEE: ${tdee.toFixed(2)} kcal/ngày<br><br>
-                <b>Chia tỷ lệ dinh dưỡng:</b><br>
-                Carb: ${carb.toFixed(0)}g | Protein: ${protein.toFixed(0)}g | Fat: ${fat.toFixed(0)}g<br><br>
-                <b>Thực đơn mẫu 7 ngày (~${tdee.toFixed(0)} kcal/ngày):</b><br>
-                - Ngày 1: Trứng, bánh mì, chuối, ức gà, cá hồi, salad<br>
-                - Ngày 2: Yến mạch, táo, thịt nạc, bí đỏ, miến gà<br>
-                - Ngày 3: Trứng, bánh mì, cá thu, tôm, salad xà lách<br>
-                - Ngày 4: Bánh mì ốp la, bò xào rau, bún thịt luộc<br>
-                - Ngày 5: Yến mạch, bơ, ức gà xào, cháo cá<br>
-                - Ngày 6: Bánh mì, trứng, thịt nạc kho, bún cá<br>
-                - Ngày 7: Phở gà, cá basa, miến xào tôm<br>
-                <img src="menu_7ngay.jpg" class="meal_placeholder.jpg" alt="Chúc bạn luôn vui khỏe và xinh đẹp">`;
-        }
+    let status = "";
+    if (bmi < 18.5) {
+        status = `Bạn đang thiếu cân, nên tăng khoảng ${Math.abs(weightDiff).toFixed(1)} kg để đạt cân nặng lý tưởng.`;
+    } else if (bmi < 23) {
+        status = "Bạn đang có cân nặng bình thường, hãy duy trì.";
+    } else if (bmi < 25) {
+        status = `Bạn hơi thừa cân, nên giảm khoảng ${weightDiff.toFixed(1)} kg để đạt cân nặng lý tưởng.`;
+    } else {
+        status = `Bạn đang thừa cân, nên giảm khoảng ${weightDiff.toFixed(1)} kg để đạt cân nặng lý tưởng.`;
+    }
+
+    // Tính dinh dưỡng
+    const carb = tdee * 0.5 / 4;
+    const protein = tdee * 0.25 / 4;
+    const fat = tdee * 0.25 / 9;
+
+    // Hiển thị kết quả
+    document.getElementById("result").innerHTML =
+        `<h3>Kết quả:</h3>
+        BMI: ${bmi.toFixed(1)} – ${status}<br>
+        BMR: ${bmr.toFixed(2)} kcal/ngày<br>
+        TDEE: ${tdee.toFixed(2)} kcal/ngày<br><br>
+        <b>Chia tỷ lệ dinh dưỡng:</b><br>
+        Carb: ${carb.toFixed(0)}g | Protein: ${protein.toFixed(0)}g | Fat: ${fat.toFixed(0)}g<br><br>
+        <b>Thực đơn mẫu 7 ngày (~${tdee.toFixed(0)} kcal/ngày):</b><br>
+        - Ngày 1: Trứng, bánh mì, chuối, ức gà, cá hồi, salad<br>
+        - Ngày 2: Yến mạch, táo, thịt nạc, bí đỏ, miến gà<br>
+        - Ngày 3: Trứng, bánh mì, cá thu, tôm, salad xà lách<br>
+        - Ngày 4: Bánh mì ốp la, bò xào rau, bún thịt luộc<br>
+        - Ngày 5: Yến mạch, bơ, ức gà xào, cháo cá<br>
+        - Ngày 6: Bánh mì, trứng, thịt nạc kho, bún cá<br>
+        - Ngày 7: Phở gà, cá basa, miến xào tôm<br>
+        <img src="menu_7ngay.jpg" class="meal-img" alt="Chúc bạn luôn vui khỏe và xinh đẹp">`;
+}
+
     </script>
 </body>
 </html>
