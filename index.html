@@ -149,14 +149,37 @@
                 TDEE: ${tdee.toFixed(2)} kcal/ngày<br><br>
                 <b>Chia tỷ lệ dinh dưỡng:</b><br>
                 Carb: ${carb.toFixed(0)}g | Protein: ${protein.toFixed(0)}g | Fat: ${fat.toFixed(0)}g<br><br>
-                <b>Thực đơn mẫu 7 ngày (~${tdee.toFixed(0)} kcal/ngày):</b><br>
-                - Ngày 1: Trứng, bánh mì, chuối, ức gà, cá hồi, salad<br>
-                - Ngày 2: Yến mạch, táo, thịt nạc, bí đỏ, miến gà<br>
-                - Ngày 3: Trứng, bánh mì, cá thu, tôm, salad xà lách<br>
-                - Ngày 4: Bánh mì ốp la, bò xào rau, bún thịt luộc<br>
-                - Ngày 5: Yến mạch, bơ, ức gà xào, cháo cá<br>
-                - Ngày 6: Bánh mì, trứng, thịt nạc kho, bún cá<br>
-                - Ngày 7: Phở gà, cá basa, miến xào tôm<br>
+               // Tùy chọn thực đơn theo TDEE
+let menu = "";
+
+if (tdee < 1800) {
+    menu = `
+    - Ngày 1: Trứng luộc, bánh mì đen, rau luộc<br>
+    - Ngày 2: Yến mạch, táo, cá hấp<br>
+    - Ngày 3: Cháo yến mạch, ức gà, bí đỏ<br>
+    - Ngày 4: Bún thịt luộc, canh cải<br>
+    - Ngày 5: Miến gà, rau trộn<br>
+    - Ngày 6: Cháo cá, rau cải luộc<br>
+    - Ngày 7: Trứng hấp, khoai lang, rau xanh`;
+} else if (tdee <= 2400) {
+    menu = `
+    - Ngày 1: Trứng, bánh mì, chuối, ức gà, cá hồi, salad<br>
+    - Ngày 2: Yến mạch, táo, thịt nạc, bí đỏ, miến gà<br>
+    - Ngày 3: Trứng, bánh mì, cá thu, tôm, salad xà lách<br>
+    - Ngày 4: Bánh mì ốp la, bò xào rau, bún thịt luộc<br>
+    - Ngày 5: Yến mạch, bơ, ức gà xào, cháo cá<br>
+    - Ngày 6: Bánh mì, trứng, thịt nạc kho, bún cá<br>
+    - Ngày 7: Phở gà, cá basa, miến xào tôm`;
+} else {
+    menu = `
+    - Ngày 1: Phở bò, trứng ốp la, sinh tố chuối bơ đậu phộng<br>
+    - Ngày 2: Cơm trắng, gà kho, canh bí đỏ, sữa<br>
+    - Ngày 3: Bánh mì kẹp thịt, nước cam, khoai luộc<br>
+    - Ngày 4: Cơm sườn nướng, canh rau ngót, sữa chua<br>
+    - Ngày 5: Xôi gà, trứng, sữa đậu nành<br>
+    - Ngày 6: Mì xào bò, chuối, sữa<br>
+    - Ngày 7: Cơm cá kho, canh chua, rau muống xào`;
+}
                 <img src="menu_7ngay.jpg" class="meal-img" alt="Chúc bạn luôn:vui khỏe - xinh đẹp - mạnh mẽ">`;
         }
     </script>
