@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tính BMI, BMR, TDEE</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    input, select, button {
+      font-size: 16px;
+      padding: 8px;
+      margin: 5px 0;
+    }
+    img {
+      max-width: 100%;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tính BMI, BMR, TDEE và Thực đơn mẫu</h1>
+  <form id="form">
+    <label>Chiều cao (cm):</label><br>
+    <input type="number" id="height" required><br>
+    <label>Cân nặng (kg):</label><br>
+    <input type="number" id="weight" required><br>
+    <label>Tuổi:</label><br>
+    <input type="number" id="age" required><br>
+    <label>Giới tính:</label><br>
+    <select id="gender">
+      <option value="male">Nam</option>
+      <option value="female">Nữ</option>
+    </select><br>
+    <label>Mức độ hoạt động:</label><br>
+    <select id="activity">
+      <option value="1.2">Ít vận động</option>
+      <option value="1.375">Vận động nhẹ</option>
+      <option value="1.55">Vận động vừa</option>
+      <option value="1.725">Vận động nhiều</option>
+      <option value="1.9">Rất năng động</option>
+    </select><br><br>
+    <button type="submit">Tính toán</button>
+  </form>
+
+  <div id="result"></div>
+
+  <img src="menu_7ngay.jpg" alt="Thực đơn minh họa">
+
+  <script>
+    document.getElementById('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const height = parseFloat(document.getElementById('height').value);
+      const weight = parseFloat(document.getElementById('weight').value);
+      const age = parseFloat(document.getElementById('age').value);
+      const gender = document.getElementById('gender').value;
+      const activity = parseFloat(document.getElementById('activity').value);
+
+      const heightM = height / 100;
+      const bmi = weight / (heightM * heightM);
+      let bmiMessage = "";
+      let idealWeight = 22 * heightM * heightM;
+      let diff = weight - idealWeight;
+      diff = Math.round(diff * 10) / 10;
+
+      if (bmi < 18.5) {
+        bmiMessage = `Bạn thiếu cân, nên tăng khoảng ${Math.abs(diff)} kg để đạt mức lý tưởng.`;
+      } else if (bmi >= 18.5 && bmi < 23) {
+        bmiMessage = "Bạn có cân nặng lý tưởng.";
+      } else if (bmi >= 23 && bmi < 25) {
+        bmiMessage = `Bạn hơi thừa cân, nên giảm khoảng ${Math.abs(diff)} kg.`;
+      } else {
+        bmiMessage = `Bạn đang thừa cân, nên giảm khoảng ${Math.abs(diff)} kg để về mức lý tưởng.`;
+      }
+
+      // Tính BMR
+      let bmr;
+      if (gender === "male") {
+        bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+      } else {
+        bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+      }
+
+      // TDEE
+      const tdee = bmr * activity;
+
+      // Macro ratio (Carb: 50%, Protein: 25%, Fat: 25%)
+      const carb = Math.round((tdee * 0.5) / 4);
+      const protein = Math.round((tdee * 0.25) / 4);
+      const fat = Math.round((tdee * 0.25) / 9);
+
+      const menu = `
+        <strong>Thực đơn mẫu 7 ngày (~${Math.round(tdee)} kcal/ngày):</strong><br>
+        - Ngày 1: Trứng, bánh mì, chuối, ức gà, cá hồi, salad<br>
+        - Ngày 2: Yến mạch, táo, thịt nạc, bí đỏ, miến gà<br>
+        - Ngày 3: Trứng, bánh mì, cá thu, tôm, salad xà lách<br>
+        - Ngày 4: Bánh mì ốp la, bò xào rau, bún thịt luộc<br>
+        - Ngày 5: Yến mạch, bơ, ức gà xào, cháo cá<br>
+        - Ngày 6: Bánh mì, trứng, thịt nạc kho, bún cá<br>
+        - Ngày 7: Phở gà, cá basa, miến xào tôm
+      `;
+
+      document.getElementById('result').innerHTML = `
+        <h3>Kết quả:</h3>
+        <p>BMI: ${bmi.toFixed(1)} - ${bmiMessage}</p>
+        <p>BMR: ${bmr.toFixed(2)} kcal/ngày</p>
+        <p>TDEE: ${tdee.toFixed(2)} kcal/ngày</p>
+        <p><strong>Chia tỷ lệ dinh dưỡng:</strong><br>
+        Carb: ${carb}g | Protein: ${protein}g | Fat: ${fat}g</p>
+        <p>${menu}</p>
+      `;
+    });
+  </script>
+</body>
+</html>
