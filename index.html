@@ -177,25 +177,17 @@ function calculate() {
         - Ngày 7: Cơm cá kho, canh chua, rau muống xào`;
     }
 
-    document.getElementById("result").innerHTML = `
-    <h3>Kết quả:</h3>
-    <p><strong>BMI:</strong> ${bmi.toFixed(1)} – ${status}</p>
-    <p>${weightNote}</p>
-    <p><strong>BMR:</strong> ${bmr.toFixed(2)} kcal/ngày</p>
-    <p><strong>TDEE:</strong> ${tdee.toFixed(2)} kcal/ngày</p>
-    <br>
-    <b>Chia tỷ lệ dinh dưỡng:</b><br>
-    Carb: ${carb.toFixed(0)}g | Protein: ${protein.toFixed(0)}g | Fat: ${fat.toFixed(0)}g
-    <br><br>
-    <b>Thực đơn mẫu 7 ngày (~${tdee.toFixed(0)} kcal/ngày):</b><br>
-    ${menu}
-    <br><br>
-    <img src="menu_7ngay.jpg" class="meal-img" 
-         alt="Giảm mỡ nội tạng bằng thuốc tiêm và Hút mỡ dưới da là giải pháp làm đẹp nhanh & an toàn. 
-              Chúc bạn luôn: vui khỏe - xinh đẹp - mạnh mẽ. 
-              Tập thể dục mỗi ngày để có sức khỏe tốt và tinh thần minh mẫn nhất. 
-              Tư vấn miễn phí Zalo:0979223636">
-`;
+    document.getElementById("result").innerHTML =
+        `<h3>Kết quả:</h3>
+        BMI: ${bmi.toFixed(1)} – ${status}<br>${weightNote}<br>
+        BMR: ${bmr.toFixed(2)} kcal/ngày<br>
+        TDEE: ${tdee.toFixed(2)} kcal/ngày<br><br>
+        <b>Chia tỷ lệ dinh dưỡng:</b><br>
+        Carb: ${carb.toFixed(0)}g | Protein: ${protein.toFixed(0)}g | Fat: ${fat.toFixed(0)}g<br><br>
+        <b>Thực đơn mẫu 7 ngày (~${tdee.toFixed(0)} kcal/ngày):</b><br>
+        ${menu}
+        <img src="menu_7ngay.jpg" class="meal-img" alt="Chúc bạn luôn: vui khỏe - xinh đẹp - mạnh mẽ">`;
+}
 </script>
 </body>
 </html>
